@@ -6,7 +6,7 @@ class Api {
 
     public function __construct($defaultHeaders, $url) {
         $this->headers = array_merge([
-            "X-LOGINLLAMA-SOURCE" => "node-sdk",
+            "X-LOGINLLAMA-SOURCE" => "php-sdk",
             "X-LOGINLLAMA-VERSION" => "1",
             "Content-Type" => "application/json"
         ], $defaultHeaders);

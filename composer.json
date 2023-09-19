@@ -1,14 +1,14 @@
 {
-  "name": "joshghent/loginllama.php",
+  "name": "joshghent/loginllama",
   "description": "A PHP Wrapper for LoginLlama - a suspicious login detection API",
-  "type": "metapackage",
+  "type": "library",
   "license": "GNU GPL v3",
   "autoload": {
     "classmap": [
       "src/"
     ],
     "psr-4": {
-      "Joshghent\\LoginllamaPhp\\": "src/"
+      "LoginLlama\\": "src/"
     }
   },
   "scripts": {
@@ -20,6 +20,10 @@
       "email": "me@joshghent.com"
     }
   ],
+  "require": {
+    "php": ">=7.1.0",
+    "ext-curl": "*"
+  },
   "require-dev": {
     "phpunit/phpunit": "^10.3"
   }
