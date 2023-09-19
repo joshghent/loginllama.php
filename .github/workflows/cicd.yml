@@ -69,6 +69,6 @@ jobs:
 
       - name: Publish to Packagist
         run: |
-          curl -X POST -H "content-type: application/json" https://packagist.org/api/update-package?username=${{ secrets.PACKAGIST_USERNAME }}&apiToken=${{ secrets.PACKAGIST_API_TOKEN }}
+          curl -X POST -H "content-type: application/json" https://packagist.org/api/update-package?username=${{ secrets.PACKAGIST_USERNAME }}&apiToken=${{ secrets.PACKAGIST_API_TOKEN }} -d'{"repository":{"url":"https://packagist.org/packages/joshghent/loginllama"}}'
         env:
           PACKAGE_NAME: joshghent/loginllama
