@@ -2,7 +2,7 @@
   "name": "joshghent/loginllama",
   "description": "A PHP Wrapper for LoginLlama - a suspicious login detection API",
   "type": "library",
-  "license": "GNU GPL v3",
+  "license": "GPL-3.0-only",
   "autoload": {
     "classmap": [
       "src/"
