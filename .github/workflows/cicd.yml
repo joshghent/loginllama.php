@@ -1,0 +1,81 @@
+name: CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      force_release:
+        description: Whether to run the release job no matter what
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Run tests
+        run: composer test
+
+  changelog:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.tag-release.outputs.releases_created }}
+
+    steps:
+      - name: Release PR
+        uses: google-github-actions/release-please-action@v3
+        with:
+          release-type: php
+          package-name: "loginllama"
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
+
+  publish:
+    needs:
+      - test
+      - changelog
+    if: "(contains(github.event.head_commit.message, 'chore(main): release') && github.event_name == 'push' && github.ref == 'refs/heads/main') || inputs.force_release"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Publish to Packagist
+        run: |
+          curl -X POST -H "content-type: application/json" https://packagist.org/api/update-package?username=${{ secrets.PACKAGIST_USERNAME }}&apiToken=${{ secrets.PACKAGIST_API_TOKEN }}
+        env:
+          PACKAGE_NAME: joshghent/loginllama
