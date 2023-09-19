@@ -1,1 +1,0 @@
-{"version":1,"defects":{"LoginLlamaTest::testValidLogin":8,"LoginLlamaTest::testInvalidLogin":7},"times":{"LoginLlamaTest::testValidLogin":0.002,"LoginLlamaTest::testInvalidLogin":0}}
