@@ -66,4 +66,4 @@ If you find any issues or have suggestions for improvements, please open an issu
 
 ## License
 
-This package is licensed under the [GNU GPL v3](LICENSE).
+This package is licensed under the [GNU GPL v3](LICENCE).
