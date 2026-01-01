@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/joshghent/loginllama.php/compare/v1.0.0...v1.1.0) (2023-09-19)
+
+
+### Features
+
+* update licence ([#4](https://github.com/joshghent/loginllama.php/issues/4)) ([f4b617a](https://github.com/joshghent/loginllama.php/commit/f4b617a5d86457458d5d24590a246b6539deea1b))
+
 ## 1.0.0 (2023-09-19)
 
 
