@@ -1,5 +1,6 @@
 {
   "name": "joshghent/loginllama",
+  "version": "2.0.0",
   "description": "A PHP Wrapper for LoginLlama - a suspicious login detection API",
   "type": "library",
   "license": "GPL-3.0-only",
@@ -21,7 +22,7 @@
     }
   ],
   "require": {
-    "php": ">=8.1.0",
+    "php": ">=8.3.0",
     "ext-curl": "*"
   },
   "require-dev": {
