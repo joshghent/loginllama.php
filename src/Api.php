@@ -1,5 +1,7 @@
 <?php
 
+namespace LoginLlama;
+
 class Api {
     private $headers;
     private $baseUrl;

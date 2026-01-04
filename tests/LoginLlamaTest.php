@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use LoginLlama\LoginLlama;
 use LoginLlama\LoginCheckStatus;
+use LoginLlama\Api;
 
 final class LoginLlamaTest extends TestCase {
     private $loginLlama;
