@@ -1,6 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use LoginLlama\LoginLlama;
+use LoginLlama\LoginCheckStatus;
+use LoginLlama\Api;
 
 final class LoginLlamaTest extends TestCase {
     private $loginLlama;
@@ -21,10 +24,9 @@ final class LoginLlamaTest extends TestCase {
                           'codes' => [LoginCheckStatus::VALID]
                       ]);
 
-        $result = $this->loginLlama->check_login([
-            'ip_address' => '192.168.1.1',
-            'user_agent' => 'Mozilla/5.0',
-            'identity_key' => 'validUser'
+        $result = $this->loginLlama->check('validUser', [
+            'ipAddress' => '192.168.1.1',
+            'userAgent' => 'Mozilla/5.0',
         ]);
 
         $this->assertEquals('success', $result['status']);
@@ -42,15 +44,59 @@ final class LoginLlamaTest extends TestCase {
                         'codes' => [LoginCheckStatus::KNOWN_PROXY]
                     ]);
 
-        $result = $this->loginLlama->check_login([
-            'ip_address' => '192.168.1.1',
-            'user_agent' => 'Mozilla/5.0',
-            'identity_key' => 'invalidUser'
+        $result = $this->loginLlama->check('invalidUser', [
+            'ipAddress' => '192.168.1.1',
+            'userAgent' => 'Mozilla/5.0',
         ]);
 
         $this->assertEquals('error', $result['status']);
         $this->assertEquals('Login check failed', $result['message']);
         $this->assertContains(LoginCheckStatus::KNOWN_PROXY, $result['codes']);
     }
+
+    public function testReportSuccess() {
+        $this->apiMock->expects($this->once())
+                      ->method('post')
+                      ->with(
+                          '/login/check',
+                          $this->callback(function($params) {
+                              return $params['authentication_outcome'] === 'success';
+                          })
+                      )
+                      ->willReturn([
+                          'status' => 'success',
+                          'message' => 'Login recorded',
+                          'codes' => [LoginCheckStatus::VALID]
+                      ]);
+
+        $result = $this->loginLlama->reportSuccess('user123', [
+            'ipAddress' => '192.168.1.1',
+            'userAgent' => 'Mozilla/5.0',
+        ]);
+
+        $this->assertEquals('success', $result['status']);
+    }
+
+    public function testReportFailure() {
+        $this->apiMock->expects($this->once())
+                      ->method('post')
+                      ->with(
+                          '/login/check',
+                          $this->callback(function($params) {
+                              return $params['authentication_outcome'] === 'failed';
+                          })
+                      )
+                      ->willReturn([
+                          'status' => 'success',
+                          'message' => 'Failed login recorded',
+                          'codes' => []
+                      ]);
+
+        $result = $this->loginLlama->reportFailure('user123', [
+            'ipAddress' => '192.168.1.1',
+            'userAgent' => 'Mozilla/5.0',
+        ]);
+
+        $this->assertEquals('success', $result['status']);
+    }
 }
-?>
