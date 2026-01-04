@@ -74,6 +74,7 @@ class LoginLlama {
      *                       - geoCountry: Country name or ISO code
      *                       - geoCity: City name
      *                       - userTimeOfDay: User's local time in HH:mm format
+     *                       - timestamp: Timestamp of the login attempt (ISO 8601 recommended)
      *                       - authenticationOutcome: 'success' (default), 'failed', or 'pending'
      *                       - request: Framework request object
      * @return array Login check result
@@ -165,6 +166,7 @@ class LoginLlama {
             'geo_country' => $options['geoCountry'] ?? $options['geo_country'] ?? null,
             'geo_city' => $options['geoCity'] ?? $options['geo_city'] ?? null,
             'user_time_of_day' => $options['userTimeOfDay'] ?? $options['user_time_of_day'] ?? null,
+            'timestamp' => $options['timestamp'] ?? null,
             'authentication_outcome' => $options['authenticationOutcome'] ?? $options['authentication_outcome'] ?? null,
         ]);
     }

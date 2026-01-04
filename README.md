@@ -214,6 +214,8 @@ Check a login attempt for suspicious activity.
   - `'geoCountry'`: ISO country code (e.g., 'US', 'GB')
   - `'geoCity'`: City name for additional context
   - `'userTimeOfDay'`: Time of login attempt
+  - `'timestamp'`: Timestamp of the login attempt (ISO 8601 recommended)
+  - `'authenticationOutcome'`: 'success' (default), 'failed', or 'pending'
 
 **Returns:** Associative array
 
