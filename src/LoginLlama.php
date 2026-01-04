@@ -28,6 +28,18 @@ class LoginCheckStatus {
 }
 
 /**
+ * Authentication outcome values for tracking login results
+ */
+class AuthenticationOutcome {
+    /** User's credentials were valid (default) */
+    const SUCCESS = "success";
+    /** User's credentials were invalid (wrong password, MFA failed, etc.) */
+    const FAILED = "failed";
+    /** Pre-auth check, outcome not yet known */
+    const PENDING = "pending";
+}
+
+/**
  * LoginLlama client for detecting suspicious login attempts
  */
 class LoginLlama {
@@ -62,6 +74,7 @@ class LoginLlama {
      *                       - geoCountry: Country name or ISO code
      *                       - geoCity: City name
      *                       - userTimeOfDay: User's local time in HH:mm format
+     *                       - authenticationOutcome: 'success' (default), 'failed', or 'pending'
      *                       - request: Framework request object
      * @return array Login check result
      * @throws \Exception If required parameters cannot be detected
@@ -83,6 +96,13 @@ class LoginLlama {
      * $result = $loginllama->check('user@example.com', [
      *     'ipAddress' => '1.2.3.4',
      *     'userAgent' => 'Custom/1.0'
+     * ]);
+     *
+     * @example
+     * // Pre-auth check
+     * $result = $loginllama->check($email, [
+     *     'authenticationOutcome' => AuthenticationOutcome::PENDING,
+     *     'request' => $request
      * ]);
      */
     public function check(string $identityKey, array $options = []): array {
@@ -145,7 +165,53 @@ class LoginLlama {
             'geo_country' => $options['geoCountry'] ?? $options['geo_country'] ?? null,
             'geo_city' => $options['geoCity'] ?? $options['geo_city'] ?? null,
             'user_time_of_day' => $options['userTimeOfDay'] ?? $options['user_time_of_day'] ?? null,
+            'authentication_outcome' => $options['authenticationOutcome'] ?? $options['authentication_outcome'] ?? null,
         ]);
+    }
+
+    /**
+     * Report a successful authentication
+     *
+     * Use this after the user has successfully authenticated with your system.
+     * This is a convenience method equivalent to:
+     * `check($identityKey, ['authenticationOutcome' => 'success', ...])`
+     *
+     * @param string $identityKey User identifier (email, username, user ID, etc.)
+     * @param array $options Optional overrides and additional context
+     * @return array Login check result
+     * @throws \Exception If required parameters cannot be detected
+     *
+     * @example
+     * // After successful login
+     * if ($authResult->success) {
+     *     $loginllama->reportSuccess($user->id, ['request' => $request]);
+     * }
+     */
+    public function reportSuccess(string $identityKey, array $options = []): array {
+        $options['authenticationOutcome'] = AuthenticationOutcome::SUCCESS;
+        return $this->check($identityKey, $options);
+    }
+
+    /**
+     * Report a failed authentication attempt
+     *
+     * Use this when the user's credentials are invalid (wrong password, MFA failed, etc.).
+     * This helps LoginLlama detect brute force and credential stuffing attacks.
+     *
+     * @param string $identityKey User identifier (email, username, user ID, etc.)
+     * @param array $options Optional overrides and additional context
+     * @return array Login check result
+     * @throws \Exception If required parameters cannot be detected
+     *
+     * @example
+     * // After failed login
+     * if (!$authResult->success) {
+     *     $loginllama->reportFailure($email, ['request' => $request]);
+     * }
+     */
+    public function reportFailure(string $identityKey, array $options = []): array {
+        $options['authenticationOutcome'] = AuthenticationOutcome::FAILED;
+        return $this->check($identityKey, $options);
     }
 
     /**
