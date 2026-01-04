@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/joshghent/loginllama.php/compare/v1.1.0...v1.2.0) (2026-01-04)
+
+
+### Features
+
+* add reporting of failures ([#7](https://github.com/joshghent/loginllama.php/issues/7)) ([107684b](https://github.com/joshghent/loginllama.php/commit/107684b21c20e642740d5330205d7116f03d519f))
+* update licence ([#6](https://github.com/joshghent/loginllama.php/issues/6)) ([b84da15](https://github.com/joshghent/loginllama.php/commit/b84da151fa825205d795cbcdb792ee7fd7ea6c54))
+
 ## [1.1.0](https://github.com/joshghent/loginllama.php/compare/v1.0.0...v1.1.0) (2023-09-19)
 
 
