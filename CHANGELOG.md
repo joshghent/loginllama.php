@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/joshghent/loginllama.php/compare/v1.2.0...v1.2.1) (2026-10-19)
+
+
+### Bug Fixes
+
+* **security:** bump phpunit to 10.5.66 ([#11](https://github.com/joshghent/loginllama.php/issues/11)) ([3620bf1](https://github.com/joshghent/loginllama.php/commit/3620bf13ea669e38a3a4b1eb67a0b095a1c8a352))
+
 ## [1.2.0](https://github.com/joshghent/loginllama.php/compare/v1.1.0...v1.2.0) (2026-01-04)
 
 
