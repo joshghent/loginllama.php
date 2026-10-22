@@ -26,6 +26,9 @@ jobs:
         with:
           php-version: "8.3"
           coverage: none
+        env:
+          # Install the latest 8.3 patch (>= 8.3.36 for CVE-2026-109618/109619)
+          update: true
 
       - name: Install dependencies
         run: composer install
