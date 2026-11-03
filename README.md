@@ -216,6 +216,7 @@ Check a login attempt for suspicious activity.
   - `'userTimeOfDay'`: Time of login attempt
   - `'timestamp'`: Timestamp of the login attempt (ISO 8601 recommended)
   - `'authenticationOutcome'`: 'success' (default), 'failed', or 'pending'
+  - `'privileged'`: `true` for admins and other accounts that would hurt most if taken over. Any risk signal counts for more, and they get 3 failed attempts before a burst rather than 10
 
 **Returns:** Associative array
 
