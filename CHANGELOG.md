@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/joshghent/loginllama.php/compare/v1.2.1...v1.3.0) (2026-11-03)
+
+
+### Features
+
+* fail open when LoginLlama cannot be reached ([#15](https://github.com/joshghent/loginllama.php/issues/15)) ([7fdd7e3](https://github.com/joshghent/loginllama.php/commit/7fdd7e39f53644cd07c9eb3449bdb2cd3874795d))
+
 ## [1.2.1](https://github.com/joshghent/loginllama.php/compare/v1.2.0...v1.2.1) (2026-10-19)
 
 
