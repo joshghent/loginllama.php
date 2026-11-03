@@ -221,7 +221,7 @@ Check a login attempt for suspicious activity.
 
 ```php
 [
-    'status' => 'success' | 'error',
+    'status' => 'success' | 'error' | 'unavailable',
     'message' => 'string',
     'codes' => ['VALID'] | ['IP_ADDRESS_SUSPICIOUS', ...],
     'risk_score' => 0-10, // integer
@@ -391,23 +391,12 @@ try {
 }
 ```
 
-**Best Practice:** Fail open on errors to avoid blocking legitimate users during API outages:
-
-```php
-try {
-    $result = $loginllama->check($email);
-
-    if ($result['risk_score'] > 5) {
-        // Block suspicious login
-        http_response_code(403);
-        echo json_encode(['error' => 'Login blocked']);
-        exit;
-    }
-} catch (\Exception $e) {
-    error_log('LoginLlama error: ' . $e->getMessage());
-    // Fail open - allow login to proceed
-}
-```
+**Outages fail open.** If LoginLlama cannot be reached within 2 seconds, or
+answers with a server error, `check()` returns `'status' => 'unavailable'` and
+`'risk_score' => 0` instead of throwing. Code that branches on `risk_score`, or
+on `status === 'error'`, lets the login through, so an outage never blocks a
+real user. An error from the API itself, such as a bad key or an exhausted
+quota, comes back as `'status' => 'error'` with the code in `'error'`.
 
 ## IP Detection
 

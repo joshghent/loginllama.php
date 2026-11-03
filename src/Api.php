@@ -3,6 +3,9 @@
 namespace LoginLlama;
 
 class Api {
+    // Long enough for a normal check, short enough not to hold up a login.
+    private const TIMEOUT_MS = 2000;
+
     private $headers;
     private $baseUrl;
 
@@ -22,33 +25,47 @@ class Api {
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         $response = curl_exec($ch);
         if (curl_errno($ch)) {
-            throw new Exception(curl_error($ch));
+            throw new \Exception(curl_error($ch));
         }
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         if ($httpCode >= 400) {
-            throw new Exception("HTTP Error: $httpCode");
+            throw new \Exception("HTTP Error: $httpCode");
         }
         curl_close($ch);
         return json_decode($response, true);
     }
 
+    // Fails open: when LoginLlama cannot answer, the result says so with a
+    // risk score of 0 rather than throwing, so an outage never blocks a login.
     public function post($url, $params = []) {
         $ch = curl_init($this->baseUrl . $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
+        curl_setopt($ch, CURLOPT_TIMEOUT_MS, self::TIMEOUT_MS);
         $response = curl_exec($ch);
         if (curl_errno($ch)) {
-            throw new Exception(curl_error($ch));
+            return $this->unavailable(curl_error($ch));
         }
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        if ($httpCode >= 400) {
-            throw new Exception("HTTP Error: $httpCode");
-        }
-        curl_close($ch);
         $decoded = json_decode($response, true);
+        // An error body from the API is a real answer, such as a bad key or an
+        // exhausted quota. Anything else that is not OK is an outage.
+        if ($httpCode >= 400 && !isset($decoded['errors'])) {
+            return $this->unavailable("HTTP $httpCode");
+        }
         return $this->transformJsonApiResponse($decoded);
+    }
+
+    private function unavailable($message) {
+        return [
+            'status' => 'unavailable',
+            'message' => $message,
+            'codes' => [],
+            'risk_score' => 0,
+            'environment' => 'unknown'
+        ];
     }
 
     private function transformJsonApiResponse($decoded) {
