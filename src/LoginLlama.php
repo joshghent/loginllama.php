@@ -25,6 +25,12 @@ class LoginCheckStatus {
     const IP_ADDRESS_NOT_USED_BEFORE = "ip_address_not_used_before";
     const DEVICE_FINGERPRINT_NOT_USED_BEFORE = "device_fingerprint_not_used_before";
     const AI_DETECTED_SUSPICIOUS = "ai_detected_suspicious";
+    const NEW_LOGIN_LOCATION = "new_login_location";
+    const IMPOSSIBLE_TRAVEL_DETECTED = "impossible_travel_detected";
+    const GEO_MISMATCH_DETECTED = "geo_mismatch_detected";
+    const AFTER_FAILURE_BURST = "after_failure_burst";
+    const IP_PASSWORD_SPRAYING = "ip_password_spraying";
+    const PRIVILEGED_ACCOUNT = "privileged_account";
 }
 
 /**
@@ -76,6 +82,9 @@ class LoginLlama {
      *                       - userTimeOfDay: User's local time in HH:mm format
      *                       - timestamp: Timestamp of the login attempt (ISO 8601 recommended)
      *                       - authenticationOutcome: 'success' (default), 'failed', or 'pending'
+     *                       - privileged: true for admins and other accounts that would hurt
+     *                         most if taken over. Any risk signal counts for more, and they
+     *                         get 3 failed attempts before a burst rather than 10
      *                       - request: Framework request object
      * @return array Login check result
      * @throws \Exception If required parameters cannot be detected
@@ -168,6 +177,7 @@ class LoginLlama {
             'user_time_of_day' => $options['userTimeOfDay'] ?? $options['user_time_of_day'] ?? null,
             'timestamp' => $options['timestamp'] ?? null,
             'authentication_outcome' => $options['authenticationOutcome'] ?? $options['authentication_outcome'] ?? null,
+            'privileged' => (bool) ($options['privileged'] ?? false),
         ]);
     }
 

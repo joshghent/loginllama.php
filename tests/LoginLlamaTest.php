@@ -99,4 +99,22 @@ final class LoginLlamaTest extends TestCase {
 
         $this->assertEquals('success', $result['status']);
     }
+
+    public function testSendsPrivilegedForAnAdmin() {
+        $this->apiMock->expects($this->once())
+                      ->method('post')
+                      ->with(
+                          '/login/check',
+                          $this->callback(function($params) {
+                              return $params['privileged'] === true;
+                          })
+                      )
+                      ->willReturn(['status' => 'success', 'message' => '', 'codes' => []]);
+
+        $this->loginLlama->check('admin@example.test', [
+            'ipAddress' => '192.168.1.1',
+            'userAgent' => 'Mozilla/5.0',
+            'privileged' => true,
+        ]);
+    }
 }
