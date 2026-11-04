@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/joshghent/loginllama.php/compare/v1.3.0...v1.4.0) (2026-11-04)
+
+
+### Features
+
+* send privileged for admin accounts ([#17](https://github.com/joshghent/loginllama.php/issues/17)) ([94d8725](https://github.com/joshghent/loginllama.php/commit/94d872578b3b3f82465143733f6039549f400ed8))
+
+
+### Other Changes
+
+* **deps:** bump actions/checkout from 4.4.0 to 7.0.1 ([#20](https://github.com/joshghent/loginllama.php/issues/20)) ([4b93a7e](https://github.com/joshghent/loginllama.php/commit/4b93a7e76fb5098cf3af40ad6f2c5fb5ea04c40d))
+* **deps:** bump amannn/action-semantic-pull-request from 5 to 6 ([#21](https://github.com/joshghent/loginllama.php/issues/21)) ([0ff459d](https://github.com/joshghent/loginllama.php/commit/0ff459dbcec0cbfcd641528a07423de93ec2a848))
+
 ## [1.3.0](https://github.com/joshghent/loginllama.php/compare/v1.2.1...v1.3.0) (2026-11-03)
 
 
